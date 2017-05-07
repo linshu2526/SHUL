@@ -63,7 +63,20 @@ namespace SHUL
                 return decryptString;
             }
         }
-
+        /// <summary>
+        /// use sha1 to encrypt string
+        /// </summary>
+        public static string SL_SHA1_Encrypt(string Source_String)
+        {
+            return SHA1_Encrypt(Source_String + EncryptSeed);
+        }
+        public static string EncryptSeed
+        {
+            get
+            {
+                return "shulin*&^%&K";
+            }
+        }
         /// <summary>
         /// use sha1 to encrypt string
         /// </summary>

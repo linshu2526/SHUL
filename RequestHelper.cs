@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Web;
 
 namespace SHUL
 {
@@ -31,6 +32,22 @@ namespace SHUL
             Encoding encoding = Encoding.GetEncoding(RequestEncoding);
             byte[] bytesToPost = encoding.GetBytes(data);
             return PostDataToUrl(bytesToPost, url, ResponseEncoding);
+        }
+        public static string RequestUrl()
+        {
+            string allkeys = "";
+            if (HttpContext.Current.Request.Params != null)
+            {
+                if (HttpContext.Current.Request.Params.AllKeys != null)
+                {
+                    for (int i = 0; i < HttpContext.Current.Request.Params.AllKeys.Length; i++)
+                    {
+                        allkeys += "<br/>" + HttpContext.Current.Request.Params.AllKeys[i] + ":" + HttpContext.Current.Request[HttpContext.Current.Request.Params.AllKeys[i]];
+                    }
+                }
+            }
+            
+            return HttpContext.Current.Request.Url.OriginalString + "----" + allkeys;
         }
 
         /// <summary>

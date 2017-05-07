@@ -6,6 +6,12 @@ using System.Collections.Generic;
 
 namespace SHUL
 {
+    public class PageModel{
+        public int pageCount { get; set; }
+        public double pageCurr { get; set; }
+        public int pageSize { get; set; }
+        public DataRowCollection data { get; set; }
+    }
 
     public class SqlHelperAddParameter
     {
@@ -427,8 +433,13 @@ namespace SHUL
             {
                 sqlreturn = string.Format("Inserted.{0}", ReturnPRIMARY.Trim());
             }
-            //判断该数据是否存在,并且要有where条件
-            int isexist = IsExist(tablename, _IsExistParameters);
+            
+            int isexist = 0;
+            if (Update)
+            {
+                //判断该数据是否存在,并且要有where条件
+                isexist = IsExist(tablename, _IsExistParameters);
+            }
             if (isexist > 0 && !String.IsNullOrEmpty(sqlwhere))
             {
                 if (Update)
@@ -794,7 +805,7 @@ namespace SHUL
                 {
                     if (s.ToString().IndexOf(".") > 0)
                     {
-                        s = int.Parse(s.ToString().Split('.')[0]);// +1;
+                        s = int.Parse(s.ToString().Split('.')[0]) + 1;
                     }
                     return int.Parse(s.ToString());
                 }
@@ -804,6 +815,51 @@ namespace SHUL
 
         }
         #endregion
+        /// <summary>
+        /// 把sql语句变成分页语句(注意.sql里面不可以有2个及以上的SELECT关键字,不可以有orderby)
+        /// </summary>
+        /// <param name="totalsize"></param>
+        /// <param name="pagesize"></param>
+        /// <param name="sourcesql"></param>
+        /// <returns></returns>
+        public static string GetPageSql(double currentpage, double pagesize, string sourcesql, string orderby)
+        {
+            string sql2 = string.Format("select ROW_NUMBER() OVER (ORDER BY {0}) AS LSRowNumber, ", orderby);
+            string[] sql3 = sourcesql.ToLower().Trim().Replace("select", "|").Split('|');
+
+            for (int i = 1; i < sql3.Length; i++)
+            {
+                sql2 += sql3[i] + "|";
+            }
+            sql2 = sql2.TrimEnd('|').Replace("|", " select ");
+
+            string sql = string.Format(@"SELECT TOP {0} *   
+                        FROM   
+                            (  
+				               {2}
+                            )   as A    
+                        WHERE LSRowNumber > {0}*({1} - 1 )", pagesize, currentpage, sql2);
+            return sql;
+        }
+        /// <summary>
+        /// 把sql语句转换成统计总数
+        /// </summary>
+        /// <param name="sourcesql"></param>
+        /// <returns></returns>
+        public static string GetPageSqlCount(string sourcesql)
+        {
+            string sql2 = string.Format("select count(*) from ");
+            string[] sql3 = sourcesql.ToLower().Trim().Replace("from", "|").Split('|');
+
+            for (int i = 1; i < sql3.Length; i++)
+            {
+                sql2 += sql3[i] + "|";
+            }
+            sql2 = sql2.TrimEnd('|').Replace("|", " from ");
+
+
+            return sql2;
+        }
 
         #region 获取指定表中指定字段的最大值
         /// <summary>

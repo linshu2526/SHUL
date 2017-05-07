@@ -10,6 +10,19 @@ using System.Drawing.Imaging;
 
 namespace SHUL
 {
+    public class CheckCode
+    {
+        public static bool Valid(string CheckCode)
+        {
+            string _checkcode = SHUL.LSParse.ToString(Session.Get("checkcode"));
+            SHUL.Session.Remove("checkcode");
+            if (CheckCode.ToLower() == _checkcode.ToLower()){
+                return true;
+            }
+
+            return false;
+        }
+    }
     #region 验证码生成类
     /// <summary>
     /// 验证码生成类
@@ -124,7 +137,8 @@ namespace SHUL
         }
         Random random;
 
-        private String charCollection = "2,3,4,5,6,7,8,9,a,s,d,f,g,h,z,c,v,b,n,m,k,q,w,e,r,t,y,u,p,A,S,D,F,G,H,Z,C,V,B,N,M,K,Q,W,E,R,T,Y,U,P"; //定义验证码字符及出现频次 ,避免出现0 o j i l 1 x;  
+        //private String charCollection = "2,3,4,5,6,7,8,9,a,s,d,f,g,h,z,c,v,b,n,m,k,q,w,e,r,t,y,u,p,A,S,D,F,G,H,Z,C,V,B,N,M,K,Q,W,E,R,T,Y,U,P"; //定义验证码字符及出现频次 ,避免出现0 o j i l 1 x;  
+        private String charCollection = "1,2,3,4,5,6,7,8,9,0"; //定义验证码字符及出现频次 ,避免出现0 o j i l 1 x;  
         /// <summary>
         /// 随机字符串列表，请使用英文状态下的逗号分隔。
         /// </summary>

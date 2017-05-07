@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SHUL
 {
-    
+
     public class LSParse
     {
         public static string DateTimeNow
@@ -67,9 +68,14 @@ namespace SHUL
         public static double ToDouble(object _obj)
         {
             if (_obj != null)
-                return double.Parse(_obj.ToString());
-            else
-                return 0;
+            {
+                if (_obj.ToString() != "")
+                {
+                    return double.Parse(_obj.ToString());
+                }
+            }
+            return 0;
+
         }
         public static string ToString(object _obj)
         {
@@ -77,6 +83,15 @@ namespace SHUL
                 return _obj.ToString();
             else
                 return "";
+        }
+
+        public static string RequestString(string key)
+        {
+            return ToString(HttpContext.Current.Request[key]);
+        }
+        public static int RequestInt(string key)
+        {
+            return ToInt(HttpContext.Current.Request[key]);
         }
     }
 }

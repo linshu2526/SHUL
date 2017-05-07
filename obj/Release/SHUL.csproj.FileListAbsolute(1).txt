@@ -1,0 +1,5 @@
+G:\SHUL\bin\Release\SHUL.dll
+G:\SHUL\bin\Release\SHUL.pdb
+G:\SHUL\obj\Release\SHUL.csprojResolveAssemblyReference.cache
+G:\SHUL\obj\Release\SHUL.dll
+G:\SHUL\obj\Release\SHUL.pdb
