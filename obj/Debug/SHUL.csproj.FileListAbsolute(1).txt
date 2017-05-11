@@ -1,5 +1,0 @@
-G:\SHUL\bin\Debug\SHUL.dll
-G:\SHUL\bin\Debug\SHUL.pdb
-G:\SHUL\obj\Debug\SHUL.dll
-G:\SHUL\obj\Debug\SHUL.pdb
-G:\SHUL\obj\Debug\SHUL.csprojResolveAssemblyReference.cache
